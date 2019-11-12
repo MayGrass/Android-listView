@@ -1,5 +1,6 @@
 package tw.org.iii.iiiandroid05;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             int rand = (int)(Math.random()*49+1);
             dd.put(from[0], "Title" + rand);
             dd.put(from[1], "Content" + rand);
+            dd.put("detail", "Detail" + rand);
             data.add(dd);
         }
         adapter = new SimpleAdapter(
@@ -48,8 +50,32 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("DCH", "pos"+position);
+                //Log.v("DCH", "pos"+position);
+                StringBuffer sb = new StringBuffer();
+                sb.append("Title" + data.get(position).get("title") + "\n");
+                sb.append("Mesg" + data.get(position).get("mesg") + "\n");
+                sb.append("Detail" + data.get(position).get("detail") + "\n");
+                displayDetail(sb.toString());
             }
         });
+    }
+
+    //顯示詳細資料
+    private void displayDetail(String mesg) {
+        new AlertDialog.Builder(this)
+                .setMessage(mesg)
+                .create()
+                .show();
+    }
+
+    //新增資料
+    public void addItem(View view) {
+        HashMap<String,String> dd = new HashMap<>();
+        int rand = (int)(Math.random()*49+1);
+        dd.put(from[0], "Title" + rand);
+        dd.put(from[1], "Content" + rand);
+        dd.put("detail", "Detail" + rand);
+        data.add(dd);
+        adapter.notifyDataSetChanged(); //資料有異動必須呼叫，否則會閃退
     }
 }
